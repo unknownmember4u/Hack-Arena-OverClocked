@@ -5,7 +5,8 @@ import { useState, useId, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Slot } from "@radix-ui/react-slot";
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
-import { auth, googleProvider } from "../../lib/firebase";
+import { auth, googleProvider, db } from "../../lib/firebase";
+import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import * as LabelPrimitive from "@radix-ui/react-label";
 import { cva, type VariantProps } from "class-variance-authority";
 import { Eye, EyeOff } from "lucide-react";
@@ -247,8 +248,14 @@ function SignInForm() {
     const email = (formData.get("email") as string).trim();
     const password = formData.get("password") as string;
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      router.push("/dashboard");
+      const cred = await signInWithEmailAndPassword(auth, email, password);
+      // Check role in Firestore
+      let dest = "/dashboard";
+      try {
+        const snap = await getDoc(doc(db, "users", cred.user.uid));
+        if (snap.exists() && snap.data().role === "dealer") dest = "/dealer/dashboard";
+      } catch { /* default to customer */ }
+      router.push(dest);
     } catch (error: any) {
       if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
         alert("No account found with these credentials.\n\nIf you're new here → click 'Sign up' to create your account first!\nIf you already signed up → double-check your password.");
@@ -285,8 +292,14 @@ function SignUpForm() {
     const email = (formData.get("email") as string).trim();
     const password = formData.get("password") as string;
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      router.push("/dashboard");
+      const cred = await createUserWithEmailAndPassword(auth, email, password);
+      // Save role to Firestore
+      await setDoc(doc(db, "users", cred.user.uid), {
+        email,
+        role,
+        createdAt: serverTimestamp(),
+      });
+      router.push(role === "dealer" ? "/dealer/dashboard" : "/dashboard");
     } catch (error: any) {
       if (error.code === 'auth/email-already-in-use') {
         alert("This email is already registered. Please sign in instead!");
@@ -331,8 +344,22 @@ function AuthFormContainer({ isSignIn, onToggle }: { isSignIn: boolean; onToggle
       </div>
       <Button variant="outline" type="button" onClick={async () => {
         try {
-          await signInWithPopup(auth, googleProvider);
-          window.location.href = "/dashboard";
+          const result = await signInWithPopup(auth, googleProvider);
+          // Check or create role in Firestore
+          let dest = "/dashboard";
+          try {
+            const snap = await getDoc(doc(db, "users", result.user.uid));
+            if (snap.exists()) {
+              if (snap.data().role === "dealer") dest = "/dealer/dashboard";
+            } else {
+              await setDoc(doc(db, "users", result.user.uid), {
+                email: result.user.email,
+                role: "customer",
+                createdAt: serverTimestamp(),
+              });
+            }
+          } catch { /* default to customer */ }
+          window.location.href = dest;
         } catch (error: any) {
           alert(error.message);
         }
