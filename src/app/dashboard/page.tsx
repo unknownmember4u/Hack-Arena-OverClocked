@@ -43,7 +43,7 @@ export default function DashboardPage() {
     : user?.email?.[0]?.toUpperCase() ?? "U";
 
   return (
-    <div className="relative min-h-screen text-white">
+    <div className="relative min-h-screen text-white bg-[#0a0a0f]">
 
       {/* ── Glassmorphism Navbar ── */}
       <header
@@ -73,43 +73,6 @@ export default function DashboardPage() {
           <span className="text-sm text-white/50 hidden sm:block max-w-[180px] truncate">
             {user?.email}
           </span>
-
-          {/* Profile picture or initials */}
-          <div className="relative w-9 h-9 rounded-full overflow-hidden ring-1 ring-white/20 flex-shrink-0">
-            {avatarUrl ? (
-              <Image
-                src={avatarUrl}
-                alt="Profile"
-                fill
-                className="object-cover"
-                referrerPolicy="no-referrer"
-                onError={() => setImgError(true)}
-              />
-            ) : (
-              <div
-                className="w-full h-full flex items-center justify-center text-sm font-semibold"
-                style={{
-                  background: "linear-gradient(135deg, #7c3aed, #2563eb)",
-                }}
-              >
-                {initials}
-              </div>
-            )}
-          </div>
-
-          <button
-            onClick={handleSignOut}
-            className="text-sm px-4 py-1.5 rounded-lg transition-all duration-200 flex-shrink-0"
-            style={{
-              background: "rgba(255,255,255,0.08)",
-              border: "1px solid rgba(255,255,255,0.15)",
-              backdropFilter: "blur(8px)",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.15)")}
-            onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.08)")}
-          >
-            Sign Out
-          </button>
         </div>
       </header>
 
