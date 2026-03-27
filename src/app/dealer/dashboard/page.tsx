@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
 import Image from "next/image";
 import { ContactCard } from "@/components/ui/contact-card";
@@ -14,6 +14,7 @@ export default function DealerDashboard() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [requestStatus, setRequestStatus] = useState<"none" | "pending" | "approved" | "denied">("none");
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -28,6 +29,20 @@ export default function DealerDashboard() {
             router.replace("/dashboard");
           } else {
             setUser(currentUser);
+            // Check if a dealer_request already exists for this user
+            const q = query(
+              collection(db, "dealer_requests"),
+              where("uid", "==", currentUser.uid)
+            );
+            const snap = await getDocs(q);
+            if (!snap.empty) {
+              const status = snap.docs[0].data().status;
+              if (status === "approved") {
+                router.replace("/dealer/portal");
+                return;
+              }
+              setRequestStatus(status);
+            }
           }
         } catch (fsError) {
           console.warn("Dealer Dashboard Firestore error:", fsError);
@@ -66,56 +81,61 @@ export default function DealerDashboard() {
         }}
       >
         <div className="flex items-center gap-3">
-          <Image
-            src="/logo.png"
-            alt="YatraSathi Logo"
-            width={300}
-            height={80}
-            className="object-contain h-20 w-auto"
-            priority
-          />
+          <Image src="/logo.png" alt="YatraSathi Logo" width={300} height={80} className="object-contain h-20 w-auto" priority />
         </div>
         <div className="flex items-center gap-5">
-          <span className="text-xs font-semibold text-black/40 uppercase tracking-widest hidden sm:block">
-            {user?.email}
-          </span>
-          <button
-            onClick={handleSignOut}
-            className="px-5 py-2 rounded-xl bg-black text-white hover:bg-black/80 transition-all text-xs font-bold uppercase tracking-wider shadow-lg shadow-black/10"
-          >
+          <span className="text-xs font-semibold text-black/40 uppercase tracking-widest hidden sm:block">{user?.email}</span>
+          <button onClick={handleSignOut} className="px-5 py-2 rounded-xl bg-black text-white hover:bg-black/80 transition-all text-xs font-bold uppercase tracking-wider shadow-lg shadow-black/10">
             Sign Out
           </button>
         </div>
       </header>
 
-      {/* ── Main Content: ContactCard with Verification Form ── */}
+      {/* ── Main Content ── */}
       <main className="flex-1 flex items-start justify-center px-4 sm:px-6 pt-32 pb-16">
         <div className="w-full max-w-6xl">
-          <ContactCard
-            title="Dealer Verification"
-            description="Complete your profile to get verified as a YatraSathi dealer. All fields are required. Our team will review your submission within 1–2 business days."
-            contactInfo={[
-              {
-                icon: ShieldCheck,
-                label: "Secure",
-                value: "Your data is encrypted & safe",
-              },
-              {
-                icon: Clock,
-                label: "Quick Review",
-                value: "1–2 business days turnaround",
-              },
-              {
-                icon: BadgeCheck,
-                label: "Get Verified",
-                value: "Unlock full dealer access",
-                className: "md:col-span-2 lg:col-span-1",
-              },
-            ]}
-            formSectionClassName="items-start overflow-y-auto max-h-[80vh]"
-          >
-            <VerificationForm />
-          </ContactCard>
+          {requestStatus === "pending" ? (
+            /* ── Under Review State ── */
+            <div className="max-w-lg mx-auto text-center space-y-8 py-20">
+              <div className="mx-auto w-20 h-20 rounded-full bg-amber-50 flex items-center justify-center border border-amber-200/60">
+                <Clock className="h-10 w-10 text-amber-500" />
+              </div>
+              <h2 className="text-2xl font-bold tracking-tight">Verification Under Review</h2>
+              <p className="text-black/50 leading-relaxed">
+                Your information has been submitted and is currently under review by our admin team.
+                This may take <span className="font-bold text-black/70">2–3 working days</span>.
+              </p>
+              <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-amber-50 border border-amber-200/60 text-xs font-bold uppercase tracking-widest text-amber-700">
+                <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                Pending Review
+              </div>
+            </div>
+          ) : requestStatus === "denied" ? (
+            /* ── Denied State ── */
+            <div className="max-w-lg mx-auto text-center space-y-8 py-20">
+              <div className="mx-auto w-20 h-20 rounded-full bg-red-50 flex items-center justify-center border border-red-200/60">
+                <ShieldCheck className="h-10 w-10 text-red-500" />
+              </div>
+              <h2 className="text-2xl font-bold tracking-tight">Verification Denied</h2>
+              <p className="text-black/50 leading-relaxed">
+                Unfortunately, your verification request was not approved. Please contact support for more information.
+              </p>
+            </div>
+          ) : (
+            /* ── Verification Form ── */
+            <ContactCard
+              title="Dealer Verification"
+              description="Complete your profile to get verified as a YatraSathi dealer. All fields are required. Our team will review your submission within 1–2 business days."
+              contactInfo={[
+                { icon: ShieldCheck, label: "Secure", value: "Your data is encrypted & safe" },
+                { icon: Clock, label: "Quick Review", value: "1–2 business days turnaround" },
+                { icon: BadgeCheck, label: "Get Verified", value: "Unlock full dealer access", className: "md:col-span-2 lg:col-span-1" },
+              ]}
+              formSectionClassName="items-start overflow-y-auto max-h-[80vh]"
+            >
+              {user && <VerificationForm user={user} />}
+            </ContactCard>
+          )}
         </div>
       </main>
 

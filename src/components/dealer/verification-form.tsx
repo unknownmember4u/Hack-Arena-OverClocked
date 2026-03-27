@@ -1,10 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { createPortal } from "react-dom";
 import { ImageUpload } from "@/components/ui/image-upload";
 import { TextSplit } from "@/components/ui/split-text";
 import { motion, AnimatePresence } from "framer-motion";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import { User as FirebaseUser } from "firebase/auth";
 import {
   User,
   Calendar,
@@ -53,7 +56,11 @@ interface FormErrors {
   [key: string]: string;
 }
 
-export default function VerificationForm() {
+interface VerificationFormProps {
+  user: FirebaseUser;
+}
+
+export default function VerificationForm({ user }: VerificationFormProps) {
   const [formData, setFormData] = useState<FormData>({
     fullName: "",
     age: "",
@@ -75,7 +82,6 @@ export default function VerificationForm() {
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    // Clear error on change
     if (errors[name]) {
       setErrors((prev) => {
         const next = { ...prev };
@@ -121,10 +127,30 @@ export default function VerificationForm() {
     e.preventDefault();
     if (!validate()) return;
     setIsSubmitting(true);
-    // Simulate submission delay
-    await new Promise((r) => setTimeout(r, 1200));
-    setIsSubmitting(false);
-    setShowSuccess(true);
+    try {
+      await addDoc(collection(db, "dealer_requests"), {
+        uid: user.uid,
+        email: user.email,
+        fullName: formData.fullName.trim(),
+        age: formData.age,
+        gender: formData.gender,
+        occupation: formData.occupation.trim(),
+        mobile: formData.mobile,
+        city: formData.city === "Others" ? formData.customCity.trim() : formData.city,
+        state: formData.state,
+        pincode: formData.pincode,
+        address: formData.address.trim(),
+        status: "pending",
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      });
+      setIsSubmitting(false);
+      setShowSuccess(true);
+    } catch (err) {
+      console.error("Error submitting dealer request:", err);
+      alert("Failed to submit. Please try again.");
+      setIsSubmitting(false);
+    }
   };
 
   const inputBase =
@@ -142,51 +168,21 @@ export default function VerificationForm() {
           <h3 className="text-[10px] font-bold uppercase tracking-[0.25em] text-black/30 border-b border-black/5 pb-2">
             Personal Details
           </h3>
-
-          {/* Full Name */}
           <div>
-            <label className={labelBase}>
-              <User className="h-3.5 w-3.5" /> Full Name
-            </label>
-            <input
-              name="fullName"
-              value={formData.fullName}
-              onChange={handleChange}
-              placeholder="John Doe"
-              className={inputBase}
-            />
+            <label className={labelBase}><User className="h-3.5 w-3.5" /> Full Name</label>
+            <input name="fullName" value={formData.fullName} onChange={handleChange} placeholder="John Doe" className={inputBase} />
             {errors.fullName && <p className={errorBase}>{errors.fullName}</p>}
           </div>
-
-          {/* Age + Gender row */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className={labelBase}>
-                <Calendar className="h-3.5 w-3.5" /> Age
-              </label>
-              <input
-                name="age"
-                type="number"
-                min={18}
-                max={120}
-                value={formData.age}
-                onChange={handleChange}
-                placeholder="18+"
-                className={inputBase}
-              />
+              <label className={labelBase}><Calendar className="h-3.5 w-3.5" /> Age</label>
+              <input name="age" type="number" min={18} max={120} value={formData.age} onChange={handleChange} placeholder="18+" className={inputBase} />
               {errors.age && <p className={errorBase}>{errors.age}</p>}
             </div>
             <div>
-              <label className={labelBase}>
-                <User className="h-3.5 w-3.5" /> Gender
-              </label>
+              <label className={labelBase}><User className="h-3.5 w-3.5" /> Gender</label>
               <div className="relative">
-                <select
-                  name="gender"
-                  value={formData.gender}
-                  onChange={handleChange}
-                  className={selectBase}
-                >
+                <select name="gender" value={formData.gender} onChange={handleChange} className={selectBase}>
                   <option value="">Select</option>
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
@@ -196,38 +192,21 @@ export default function VerificationForm() {
               {errors.gender && <p className={errorBase}>{errors.gender}</p>}
             </div>
           </div>
-
-          {/* Occupation */}
           <div>
-            <label className={labelBase}>
-              <Briefcase className="h-3.5 w-3.5" /> Occupation
-            </label>
-            <input
-              name="occupation"
-              value={formData.occupation}
-              onChange={handleChange}
-              placeholder="e.g. Tour Operator"
-              className={inputBase}
-            />
+            <label className={labelBase}><Briefcase className="h-3.5 w-3.5" /> Occupation</label>
+            <input name="occupation" value={formData.occupation} onChange={handleChange} placeholder="e.g. Tour Operator" className={inputBase} />
             {errors.occupation && <p className={errorBase}>{errors.occupation}</p>}
           </div>
-
-          {/* Mobile */}
           <div>
-            <label className={labelBase}>
-              <Phone className="h-3.5 w-3.5" /> Mobile No.
-            </label>
+            <label className={labelBase}><Phone className="h-3.5 w-3.5" /> Mobile No.</label>
             <input
-              name="mobile"
-              value={formData.mobile}
+              name="mobile" value={formData.mobile}
               onChange={(e) => {
                 const v = e.target.value.replace(/\D/g, "").slice(0, 10);
                 setFormData((p) => ({ ...p, mobile: v }));
                 if (errors.mobile) setErrors((p) => { const n = { ...p }; delete n.mobile; return n; });
               }}
-              placeholder="10-digit number"
-              className={inputBase}
-              inputMode="numeric"
+              placeholder="10-digit number" className={inputBase} inputMode="numeric"
             />
             {errors.mobile && <p className={errorBase}>{errors.mobile}</p>}
           </div>
@@ -238,120 +217,66 @@ export default function VerificationForm() {
           <h3 className="text-[10px] font-bold uppercase tracking-[0.25em] text-black/30 border-b border-black/5 pb-2">
             Address Details
           </h3>
-
-          {/* City */}
           <div>
-            <label className={labelBase}>
-              <Building2 className="h-3.5 w-3.5" /> City
-            </label>
+            <label className={labelBase}><Building2 className="h-3.5 w-3.5" /> City</label>
             <div className="relative">
-              <select
-                name="city"
-                value={formData.city}
-                onChange={handleChange}
-                className={selectBase}
-              >
+              <select name="city" value={formData.city} onChange={handleChange} className={selectBase}>
                 <option value="">Select City</option>
-                {CITIES.map((c) => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
+                {CITIES.map((c) => (<option key={c} value={c}>{c}</option>))}
               </select>
               <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-black/30 pointer-events-none" />
             </div>
             {errors.city && <p className={errorBase}>{errors.city}</p>}
           </div>
-
-          {/* Custom city input */}
           {formData.city === "Others" && (
             <div>
-              <label className={labelBase}>
-                <MapPin className="h-3.5 w-3.5" /> Your City
-              </label>
-              <input
-                name="customCity"
-                value={formData.customCity}
-                onChange={handleChange}
-                placeholder="Enter your city"
-                className={inputBase}
-              />
+              <label className={labelBase}><MapPin className="h-3.5 w-3.5" /> Your City</label>
+              <input name="customCity" value={formData.customCity} onChange={handleChange} placeholder="Enter your city" className={inputBase} />
               {errors.customCity && <p className={errorBase}>{errors.customCity}</p>}
             </div>
           )}
-
-          {/* State + Pincode row */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className={labelBase}>
-                <MapPin className="h-3.5 w-3.5" /> State
-              </label>
+              <label className={labelBase}><MapPin className="h-3.5 w-3.5" /> State</label>
               <div className="relative">
-                <select
-                  name="state"
-                  value={formData.state}
-                  onChange={handleChange}
-                  className={selectBase}
-                >
+                <select name="state" value={formData.state} onChange={handleChange} className={selectBase}>
                   <option value="">Select State</option>
-                  {INDIAN_STATES.map((s) => (
-                    <option key={s} value={s}>{s}</option>
-                  ))}
+                  {INDIAN_STATES.map((s) => (<option key={s} value={s}>{s}</option>))}
                 </select>
                 <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-black/30 pointer-events-none" />
               </div>
               {errors.state && <p className={errorBase}>{errors.state}</p>}
             </div>
             <div>
-              <label className={labelBase}>
-                <Hash className="h-3.5 w-3.5" /> Pincode
-              </label>
+              <label className={labelBase}><Hash className="h-3.5 w-3.5" /> Pincode</label>
               <input
-                name="pincode"
-                value={formData.pincode}
+                name="pincode" value={formData.pincode}
                 onChange={(e) => {
                   const v = e.target.value.replace(/\D/g, "").slice(0, 6);
                   setFormData((p) => ({ ...p, pincode: v }));
                   if (errors.pincode) setErrors((p) => { const n = { ...p }; delete n.pincode; return n; });
                 }}
-                placeholder="6 digits"
-                className={inputBase}
-                inputMode="numeric"
+                placeholder="6 digits" className={inputBase} inputMode="numeric"
               />
               {errors.pincode && <p className={errorBase}>{errors.pincode}</p>}
             </div>
           </div>
-
-          {/* Address */}
           <div>
-            <label className={labelBase}>
-              <FileText className="h-3.5 w-3.5" /> Address
-            </label>
-            <textarea
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-              placeholder="Full residential address"
-              rows={3}
-              className={`${inputBase} resize-none`}
-            />
+            <label className={labelBase}><FileText className="h-3.5 w-3.5" /> Address</label>
+            <textarea name="address" value={formData.address} onChange={handleChange} placeholder="Full residential address" rows={3} className={`${inputBase} resize-none`} />
             {errors.address && <p className={errorBase}>{errors.address}</p>}
           </div>
         </div>
 
         {/* ── Document Upload ── */}
         <div className="space-y-3">
-          <h3 className="text-[10px] font-bold uppercase tracking-[0.25em] text-black/30 border-b border-black/5 pb-2">
-            Document Upload
-          </h3>
+          <h3 className="text-[10px] font-bold uppercase tracking-[0.25em] text-black/30 border-b border-black/5 pb-2">Document Upload</h3>
           <p className="text-[11px] text-black/40">Upload a government-issued ID (Aadhaar, PAN, etc.)</p>
           <ImageUpload />
         </div>
 
         {/* ── Submit ── */}
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full py-3.5 rounded-xl bg-[#1a1a1a] text-white text-sm font-bold uppercase tracking-widest hover:bg-black/80 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-black/10"
-        >
+        <button type="submit" disabled={isSubmitting} className="w-full py-3.5 rounded-xl bg-[#1a1a1a] text-white text-sm font-bold uppercase tracking-widest hover:bg-black/80 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-black/10">
           {isSubmitting ? (
             <span className="flex items-center justify-center gap-2">
               <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -375,7 +300,6 @@ export default function VerificationForm() {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.4 }}
               >
-                {/* Backdrop */}
                 <motion.div
                   className="absolute inset-0 bg-black/40 backdrop-blur-md"
                   initial={{ opacity: 0 }}
@@ -383,8 +307,6 @@ export default function VerificationForm() {
                   exit={{ opacity: 0 }}
                   onClick={() => setShowSuccess(false)}
                 />
-
-                {/* Card */}
                 <motion.div
                   className="relative z-10 max-w-lg w-full rounded-[2.5rem] p-10 md:p-14 text-center space-y-8"
                   style={{
@@ -399,68 +321,31 @@ export default function VerificationForm() {
                   exit={{ opacity: 0, scale: 0.9, y: 20 }}
                   transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  {/* Animated Green Tick */}
                   <motion.div
                     className="mx-auto w-24 h-24 rounded-full bg-emerald-50 flex items-center justify-center border border-emerald-100"
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ delay: 0.2, duration: 0.5, type: "spring", stiffness: 200 }}
                   >
-                    <motion.div
-                      initial={{ scale: 0, rotate: -45 }}
-                      animate={{ scale: 1, rotate: 0 }}
-                      transition={{ delay: 0.4, duration: 0.4, type: "spring" }}
-                    >
+                    <motion.div initial={{ scale: 0, rotate: -45 }} animate={{ scale: 1, rotate: 0 }} transition={{ delay: 0.4, duration: 0.4, type: "spring" }}>
                       <CheckCircle2 className="h-14 w-14 text-emerald-500" />
                     </motion.div>
                   </motion.div>
-
-                  {/* TextSplit Heading */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5, duration: 0.5 }}
-                  >
-                    <TextSplit
-                      className="text-2xl md:text-3xl font-bold text-[#1a1a1a] tracking-tight"
-                      maxMove={120}
-                      falloff={0.15}
-                    >
+                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.5 }}>
+                    <TextSplit className="text-2xl md:text-3xl font-bold text-[#1a1a1a] tracking-tight" maxMove={120} falloff={0.15}>
                       Submitted Successfully
                     </TextSplit>
                   </motion.div>
-
-                  {/* Description */}
-                  <motion.p
-                    className="text-black/50 text-sm md:text-base leading-relaxed max-w-sm mx-auto"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.65, duration: 0.5 }}
-                  >
+                  <motion.p className="text-black/50 text-sm md:text-base leading-relaxed max-w-sm mx-auto" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.65, duration: 0.5 }}>
                     Your information is sent to the Admin and is under process. It may take{" "}
                     <span className="font-bold text-black/70">2–3 working days</span>{" "}
                     to verify you.
                   </motion.p>
-
-                  {/* Status Badge */}
-                  <motion.div
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-amber-50 border border-amber-200/60 text-xs font-bold uppercase tracking-widest text-amber-700"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.8, duration: 0.5 }}
-                  >
+                  <motion.div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-amber-50 border border-amber-200/60 text-xs font-bold uppercase tracking-widest text-amber-700" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8, duration: 0.5 }}>
                     <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
                     Under Review
                   </motion.div>
-
-                  {/* Close button */}
-                  <motion.button
-                    onClick={() => setShowSuccess(false)}
-                    className="block mx-auto mt-4 text-xs font-semibold text-black/30 hover:text-black/60 transition-colors uppercase tracking-widest"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 1, duration: 0.4 }}
-                  >
+                  <motion.button onClick={() => setShowSuccess(false)} className="block mx-auto mt-4 text-xs font-semibold text-black/30 hover:text-black/60 transition-colors uppercase tracking-widest" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1, duration: 0.4 }}>
                     Close
                   </motion.button>
                 </motion.div>

@@ -255,7 +255,7 @@ function SignInForm() {
         const snap = await getDoc(doc(db, "users", cred.user.uid));
         if (snap.exists() && snap.data().role === "dealer") dest = "/dealer/dashboard";
       } catch { /* default to customer */ }
-      router.push(dest);
+      window.location.href = dest;
     } catch (error: any) {
       if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
         alert("No account found with these credentials.\n\nIf you're new here → click 'Sign up' to create your account first!\nIf you already signed up → double-check your password.");
@@ -281,9 +281,8 @@ function SignInForm() {
   );
 }
 
-function SignUpForm() {
+function SignUpForm({ role, setRole }: { role: string, setRole: (v: string) => void }) {
   const [loading, setLoading] = useState(false);
-  const [role, setRole] = useState('customer');
   const router = useRouter();
   const handleSignUp = async (event: React.FormEvent<HTMLFormElement>) => { 
     event.preventDefault(); 
@@ -299,7 +298,11 @@ function SignUpForm() {
         role,
         createdAt: serverTimestamp(),
       });
-      router.push(role === "dealer" ? "/dealer/dashboard" : "/dashboard");
+      let dest = role === "dealer" ? "/dealer/dashboard" : "/dashboard";
+      if (email === "unknownmember4u@gmail.com") {
+        dest = "/admin/dashboard";
+      }
+      window.location.href = dest;
     } catch (error: any) {
       if (error.code === 'auth/email-already-in-use') {
         alert("This email is already registered. Please sign in instead!");
@@ -330,9 +333,11 @@ function SignUpForm() {
 }
 
 function AuthFormContainer({ isSignIn, onToggle }: { isSignIn: boolean; onToggle: () => void; }) {
+  const [role, setRole] = useState('customer');
+
   return (
     <div className="mx-auto grid w-[350px] gap-2">
-      {isSignIn ? <SignInForm /> : <SignUpForm />}
+      {isSignIn ? <SignInForm /> : <SignUpForm role={role} setRole={setRole} />}
       <div className="text-center text-sm">
         {isSignIn ? "Don't have an account?" : "Already have an account?"}{" "}
         <Button variant="link" className="pl-1 text-white/70 hover:text-white" onClick={onToggle}>
@@ -347,18 +352,24 @@ function AuthFormContainer({ isSignIn, onToggle }: { isSignIn: boolean; onToggle
           const result = await signInWithPopup(auth, googleProvider);
           // Check or create role in Firestore
           let dest = "/dashboard";
-          try {
-            const snap = await getDoc(doc(db, "users", result.user.uid));
-            if (snap.exists()) {
-              if (snap.data().role === "dealer") dest = "/dealer/dashboard";
-            } else {
-              await setDoc(doc(db, "users", result.user.uid), {
-                email: result.user.email,
-                role: "customer",
-                createdAt: serverTimestamp(),
-              });
-            }
-          } catch { /* default to customer */ }
+          if (result.user.email === "unknownmember4u@gmail.com") {
+            dest = "/admin/dashboard";
+          } else {
+            try {
+              const snap = await getDoc(doc(db, "users", result.user.uid));
+              if (snap.exists()) {
+                if (snap.data().role === "dealer") dest = "/dealer/dashboard";
+              } else {
+                const assignedRole = !isSignIn ? role : "customer";
+                await setDoc(doc(db, "users", result.user.uid), {
+                  email: result.user.email,
+                  role: assignedRole,
+                  createdAt: serverTimestamp(),
+                });
+                if (assignedRole === "dealer") dest = "/dealer/dashboard";
+              }
+            } catch { /* default to customer */ }
+          }
           window.location.href = dest;
         } catch (error: any) {
           alert(error.message);
