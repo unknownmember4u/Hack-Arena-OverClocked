@@ -1,0 +1,1141 @@
+{
+  "meta": {
+    "city": "Nagpur",
+    "default_work_location": {
+      "lat": 21.1458,
+      "lng": 79.0882,
+      "label": "MIHAN SEZ, Nagpur"
+    },
+    "currency": "INR",
+    "version": "1.0.0"
+  },
+  "properties": [
+    {
+      "id": "P001",
+      "type": "PG",
+      "title": "Sunrise PG for Boys",
+      "location": {
+        "area": "Hingna",
+        "address": "Plot 12, Hingna Road, Nagpur",
+        "lat": 21.1074,
+        "lng": 79.0022
+      },
+      "rent_price": 6500,
+      "is_for_sale": false,
+      "selling_price": null,
+      "rooms": null,
+      "gender_preference": "male",
+      "commute_time_min": 28,
+      "transport_modes": [
+        "bike",
+        "bus"
+      ],
+      "amenities": {
+        "in_unit": [
+          "wifi",
+          "attached_bathroom",
+          "ac",
+          "laundry"
+        ],
+        "shared": [
+          "parking",
+          "kitchen",
+          "common_room"
+        ]
+      },
+      "nearby": [
+        {
+          "type": "hospital",
+          "name": "Hingna Government Hospital",
+          "lat": 21.109,
+          "lng": 79.005,
+          "distance_km": 0.4
+        },
+        {
+          "type": "school",
+          "name": "Hingna Primary School",
+          "lat": 21.106,
+          "lng": 79.001,
+          "distance_km": 0.6
+        },
+        {
+          "type": "supermarket",
+          "name": "More Supermarket",
+          "lat": 21.108,
+          "lng": 79.003,
+          "distance_km": 0.3
+        }
+      ],
+      "owner": {
+        "name": "Ramesh Patil",
+        "contact": "+91-9876543210",
+        "verified": true
+      },
+      "images": [
+        "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=300&fit=crop"
+      ],
+      "rating": 3.8,
+      "available_from": "2025-08-01",
+      "image_url": "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=300&fit=crop"
+    },
+    {
+      "id": "P002",
+      "type": "FLAT",
+      "bhk": 1,
+      "title": "1BHK Dharampeth",
+      "location": {
+        "area": "Dharampeth",
+        "address": "14, Shankar Nagar Ring Road, Nagpur",
+        "lat": 21.134,
+        "lng": 79.0782
+      },
+      "rent_price": 12000,
+      "is_for_sale": false,
+      "selling_price": null,
+      "commute_time_min": 18,
+      "transport_modes": [
+        "bike",
+        "car",
+        "bus"
+      ],
+      "amenities": {
+        "in_unit": [
+          "wifi",
+          "modular_kitchen",
+          "geyser",
+          "ac"
+        ],
+        "shared": [
+          "lift",
+          "security",
+          "parking"
+        ]
+      },
+      "nearby": [
+        {
+          "type": "hospital",
+          "name": "Alexis Hospital",
+          "lat": 21.136,
+          "lng": 79.075,
+          "distance_km": 0.5
+        },
+        {
+          "type": "school",
+          "name": "Dharampeth High School",
+          "lat": 21.132,
+          "lng": 79.08,
+          "distance_km": 0.4
+        },
+        {
+          "type": "college",
+          "name": "Dharampeth College",
+          "lat": 21.135,
+          "lng": 79.081,
+          "distance_km": 0.6
+        },
+        {
+          "type": "restaurant",
+          "name": "Haldirams Nagpur",
+          "lat": 21.1345,
+          "lng": 79.077,
+          "distance_km": 0.2
+        }
+      ],
+      "owner": {
+        "name": "Suresh Mehta",
+        "contact": "+91-9123456789",
+        "verified": true
+      },
+      "images": [
+        "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400&h=300&fit=crop"
+      ],
+      "rating": 4.2,
+      "available_from": "2025-07-15",
+      "gender_preference": "any",
+      "image_url": "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400&h=300&fit=crop"
+    },
+    {
+      "id": "P003",
+      "type": "FLAT",
+      "bhk": 2,
+      "title": "2BHK Wardha Road",
+      "location": {
+        "area": "Wardha Road",
+        "address": "Near Shankar Nagar, Wardha Road, Nagpur",
+        "lat": 21.09,
+        "lng": 79.06
+      },
+      "rent_price": 17000,
+      "is_for_sale": false,
+      "selling_price": null,
+      "commute_time_min": 35,
+      "transport_modes": [
+        "car"
+      ],
+      "amenities": {
+        "in_unit": [
+          "wifi",
+          "ac",
+          "modular_kitchen",
+          "geyser",
+          "tv"
+        ],
+        "shared": [
+          "gym",
+          "lift",
+          "parking",
+          "security",
+          "clubhouse"
+        ]
+      },
+      "nearby": [
+        {
+          "type": "hospital",
+          "name": "Care Hospital Wardha Road",
+          "lat": 21.092,
+          "lng": 79.058,
+          "distance_km": 0.4
+        },
+        {
+          "type": "school",
+          "name": "Wardha Road Public School",
+          "lat": 21.088,
+          "lng": 79.062,
+          "distance_km": 0.5
+        },
+        {
+          "type": "mall",
+          "name": "Eternity Mall",
+          "lat": 21.091,
+          "lng": 79.059,
+          "distance_km": 0.3
+        }
+      ],
+      "owner": {
+        "name": "Anjali Sharma",
+        "contact": "+91-9234567890",
+        "verified": false
+      },
+      "images": [
+        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&h=300&fit=crop"
+      ],
+      "rating": 4,
+      "available_from": "2025-09-01",
+      "gender_preference": "any",
+      "image_url": "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&h=300&fit=crop"
+    },
+    {
+      "id": "P004",
+      "type": "FLAT",
+      "bhk": 3,
+      "title": "3BHK Manish Nagar",
+      "location": {
+        "area": "Manish Nagar",
+        "address": "Block C, Manish Nagar, Nagpur",
+        "lat": 21.1045,
+        "lng": 79.0702
+      },
+      "rent_price": 22000,
+      "is_for_sale": true,
+      "selling_price": 5800000,
+      "commute_time_min": 22,
+      "transport_modes": [
+        "bike",
+        "car"
+      ],
+      "amenities": {
+        "in_unit": [
+          "wifi",
+          "ac",
+          "modular_kitchen",
+          "geyser",
+          "tv",
+          "washing_machine"
+        ],
+        "shared": [
+          "gym",
+          "pool",
+          "lift",
+          "parking",
+          "security",
+          "garden"
+        ]
+      },
+      "nearby": [
+        {
+          "type": "hospital",
+          "name": "Wockhardt Hospital",
+          "lat": 21.106,
+          "lng": 79.072,
+          "distance_km": 0.3
+        },
+        {
+          "type": "school",
+          "name": "Delhi Public School Nagpur",
+          "lat": 21.103,
+          "lng": 79.068,
+          "distance_km": 0.4
+        },
+        {
+          "type": "supermarket",
+          "name": "D-Mart Manish Nagar",
+          "lat": 21.105,
+          "lng": 79.071,
+          "distance_km": 0.2
+        },
+        {
+          "type": "park",
+          "name": "Manish Nagar Garden",
+          "lat": 21.104,
+          "lng": 79.0695,
+          "distance_km": 0.1
+        }
+      ],
+      "owner": {
+        "name": "Priya Joshi",
+        "contact": "+91-9345678901",
+        "verified": true
+      },
+      "images": [
+        "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=400&h=300&fit=crop"
+      ],
+      "rating": 4.5,
+      "available_from": "2025-07-01",
+      "gender_preference": "any",
+      "image_url": "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=400&h=300&fit=crop"
+    },
+    {
+      "id": "P005",
+      "type": "PG",
+      "title": "Galaxy PG for Girls",
+      "location": {
+        "area": "Sitabuldi",
+        "address": "23, Sitabuldi Main Road, Nagpur",
+        "lat": 21.151,
+        "lng": 79.0855
+      },
+      "rent_price": 7500,
+      "is_for_sale": false,
+      "selling_price": null,
+      "rooms": null,
+      "gender_preference": "female",
+      "commute_time_min": 12,
+      "transport_modes": [
+        "bus",
+        "bike"
+      ],
+      "amenities": {
+        "in_unit": [
+          "wifi",
+          "ac",
+          "attached_bathroom"
+        ],
+        "shared": [
+          "kitchen",
+          "laundry",
+          "security",
+          "cctv"
+        ]
+      },
+      "nearby": [
+        {
+          "type": "hospital",
+          "name": "Mayo Hospital Nagpur",
+          "lat": 21.153,
+          "lng": 79.087,
+          "distance_km": 0.3
+        },
+        {
+          "type": "college",
+          "name": "Sitabuldi Commerce College",
+          "lat": 21.149,
+          "lng": 79.084,
+          "distance_km": 0.4
+        },
+        {
+          "type": "metro_station",
+          "name": "Sitabuldi Interchange",
+          "lat": 21.1505,
+          "lng": 79.086,
+          "distance_km": 0.1
+        }
+      ],
+      "owner": {
+        "name": "Meena Rao",
+        "contact": "+91-9456789012",
+        "verified": true
+      },
+      "images": [
+        "https://images.unsplash.com/photo-1560185007-c5ca9d2c014d?w=400&h=300&fit=crop"
+      ],
+      "rating": 4.1,
+      "available_from": "2025-08-01",
+      "image_url": "https://images.unsplash.com/photo-1560185007-c5ca9d2c014d?w=400&h=300&fit=crop"
+    },
+    {
+      "id": "P006",
+      "type": "HOUSE",
+      "bhk": 2,
+      "title": "2BHK Independent House, Kalamna",
+      "location": {
+        "area": "Kalamna",
+        "address": "Plot 8, Kalamna Market Area, Nagpur",
+        "lat": 21.162,
+        "lng": 79.105
+      },
+      "rent_price": 14000,
+      "is_for_sale": true,
+      "selling_price": 3200000,
+      "commute_time_min": 20,
+      "transport_modes": [
+        "bike",
+        "car",
+        "bus"
+      ],
+      "amenities": {
+        "in_unit": [
+          "well_water",
+          "solar_panel",
+          "garden",
+          "garage"
+        ],
+        "shared": []
+      },
+      "nearby": [
+        {
+          "type": "hospital",
+          "name": "Kalamna Health Clinic",
+          "lat": 21.164,
+          "lng": 79.106,
+          "distance_km": 0.3
+        },
+        {
+          "type": "school",
+          "name": "Kalamna English Medium School",
+          "lat": 21.16,
+          "lng": 79.104,
+          "distance_km": 0.4
+        },
+        {
+          "type": "bus_stop",
+          "name": "Kalamna Bus Stop",
+          "lat": 21.1615,
+          "lng": 79.1045,
+          "distance_km": 0.1
+        }
+      ],
+      "owner": {
+        "name": "Dinesh Yadav",
+        "contact": "+91-9567890123",
+        "verified": true
+      },
+      "images": [
+        "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=400&h=300&fit=crop"
+      ],
+      "rating": 3.9,
+      "available_from": "2025-07-20",
+      "gender_preference": "any",
+      "image_url": "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=400&h=300&fit=crop"
+    },
+    {
+      "id": "P007",
+      "type": "FLAT",
+      "bhk": 2,
+      "title": "2BHK Pratap Nagar",
+      "location": {
+        "area": "Pratap Nagar",
+        "address": "Sector 5, Pratap Nagar, Nagpur",
+        "lat": 21.12,
+        "lng": 79.095
+      },
+      "rent_price": 16000,
+      "is_for_sale": false,
+      "selling_price": null,
+      "commute_time_min": 15,
+      "transport_modes": [
+        "bike",
+        "car",
+        "bus"
+      ],
+      "amenities": {
+        "in_unit": [
+          "wifi",
+          "ac",
+          "modular_kitchen"
+        ],
+        "shared": [
+          "lift",
+          "parking",
+          "security"
+        ]
+      },
+      "nearby": [
+        {
+          "type": "hospital",
+          "name": "Pratap Nagar Clinic",
+          "lat": 21.121,
+          "lng": 79.096,
+          "distance_km": 0.2
+        },
+        {
+          "type": "school",
+          "name": "Saraswati Vidyalaya",
+          "lat": 21.119,
+          "lng": 79.094,
+          "distance_km": 0.3
+        },
+        {
+          "type": "supermarket",
+          "name": "Big Bazaar Pratap Nagar",
+          "lat": 21.1205,
+          "lng": 79.0955,
+          "distance_km": 0.15
+        }
+      ],
+      "owner": {
+        "name": "Kavita Kulkarni",
+        "contact": "+91-9678901234",
+        "verified": true
+      },
+      "images": [
+        "https://images.unsplash.com/photo-1554995207-c18c203602cb?w=400&h=300&fit=crop"
+      ],
+      "rating": 4.3,
+      "available_from": "2025-08-15",
+      "gender_preference": "any",
+      "image_url": "https://images.unsplash.com/photo-1554995207-c18c203602cb?w=400&h=300&fit=crop"
+    },
+    {
+      "id": "P008",
+      "type": "PG",
+      "title": "Student Hub PG (Co-ed)",
+      "location": {
+        "area": "Ambazari",
+        "address": "Near VNIT Gate 2, Ambazari, Nagpur",
+        "lat": 21.138,
+        "lng": 79.049
+      },
+      "rent_price": 5500,
+      "is_for_sale": false,
+      "selling_price": null,
+      "rooms": null,
+      "gender_preference": "coed",
+      "commute_time_min": 25,
+      "transport_modes": [
+        "bike",
+        "bus"
+      ],
+      "amenities": {
+        "in_unit": [
+          "wifi",
+          "study_table",
+          "locker"
+        ],
+        "shared": [
+          "kitchen",
+          "common_room",
+          "laundry",
+          "whiteboard_room"
+        ]
+      },
+      "nearby": [
+        {
+          "type": "college",
+          "name": "VNIT Nagpur",
+          "lat": 21.137,
+          "lng": 79.051,
+          "distance_km": 0.3
+        },
+        {
+          "type": "library",
+          "name": "Ambazari Public Library",
+          "lat": 21.139,
+          "lng": 79.048,
+          "distance_km": 0.2
+        },
+        {
+          "type": "restaurant",
+          "name": "Café Coffee Day Ambazari",
+          "lat": 21.1375,
+          "lng": 79.0495,
+          "distance_km": 0.1
+        }
+      ],
+      "owner": {
+        "name": "Harish Bhatt",
+        "contact": "+91-9789012345",
+        "verified": true
+      },
+      "images": [
+        "https://images.unsplash.com/photo-1536376072261-38c75010e6c9?w=400&h=300&fit=crop"
+      ],
+      "rating": 4,
+      "available_from": "2025-07-01",
+      "image_url": "https://images.unsplash.com/photo-1536376072261-38c75010e6c9?w=400&h=300&fit=crop"
+    },
+    {
+      "id": "P009",
+      "type": "FLAT",
+      "bhk": 1,
+      "title": "1BHK Khamla",
+      "location": {
+        "area": "Khamla",
+        "address": "Plot 45, Khamla Road, Nagpur",
+        "lat": 21.118,
+        "lng": 79.043
+      },
+      "rent_price": 9000,
+      "is_for_sale": false,
+      "selling_price": null,
+      "commute_time_min": 30,
+      "transport_modes": [
+        "bike",
+        "bus"
+      ],
+      "amenities": {
+        "in_unit": [
+          "wifi",
+          "geyser"
+        ],
+        "shared": [
+          "parking",
+          "security"
+        ]
+      },
+      "nearby": [
+        {
+          "type": "hospital",
+          "name": "Khamla Health Center",
+          "lat": 21.119,
+          "lng": 79.044,
+          "distance_km": 0.2
+        },
+        {
+          "type": "school",
+          "name": "Khamla Marathi Vidyalaya",
+          "lat": 21.117,
+          "lng": 79.042,
+          "distance_km": 0.3
+        },
+        {
+          "type": "bus_stop",
+          "name": "Khamla Naka",
+          "lat": 21.1182,
+          "lng": 79.0432,
+          "distance_km": 0.05
+        }
+      ],
+      "owner": {
+        "name": "Rajesh Deshpande",
+        "contact": "+91-9890123456",
+        "verified": false
+      },
+      "images": [
+        "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop"
+      ],
+      "rating": 3.5,
+      "available_from": "2025-09-01",
+      "gender_preference": "any",
+      "image_url": "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop"
+    },
+    {
+      "id": "P010",
+      "type": "HOUSE",
+      "bhk": 3,
+      "title": "3BHK Bungalow, Sadar",
+      "location": {
+        "area": "Sadar",
+        "address": "Civil Lines Adjacent, Sadar, Nagpur",
+        "lat": 21.1493,
+        "lng": 79.0913
+      },
+      "rent_price": 35000,
+      "is_for_sale": true,
+      "selling_price": 9500000,
+      "commute_time_min": 10,
+      "transport_modes": [
+        "car",
+        "bike"
+      ],
+      "amenities": {
+        "in_unit": [
+          "wifi",
+          "ac",
+          "modular_kitchen",
+          "geyser",
+          "tv",
+          "washing_machine",
+          "garage",
+          "garden",
+          "servant_quarter"
+        ],
+        "shared": []
+      },
+      "nearby": [
+        {
+          "type": "hospital",
+          "name": "Lata Mangeshkar Hospital",
+          "lat": 21.151,
+          "lng": 79.092,
+          "distance_km": 0.3
+        },
+        {
+          "type": "school",
+          "name": "Center Point School",
+          "lat": 21.148,
+          "lng": 79.09,
+          "distance_km": 0.2
+        },
+        {
+          "type": "mall",
+          "name": "Empress Mall",
+          "lat": 21.15,
+          "lng": 79.093,
+          "distance_km": 0.15
+        },
+        {
+          "type": "park",
+          "name": "Telangkhedi Lake Garden",
+          "lat": 21.147,
+          "lng": 79.089,
+          "distance_km": 0.4
+        }
+      ],
+      "owner": {
+        "name": "Col. Rajendra Singh (Retd.)",
+        "contact": "+91-9901234567",
+        "verified": true
+      },
+      "images": [
+        "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&h=300&fit=crop"
+      ],
+      "rating": 4.8,
+      "available_from": "2025-07-01",
+      "gender_preference": "any",
+      "image_url": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&h=300&fit=crop"
+    },
+    {
+      "id": "P011",
+      "type": "FLAT",
+      "bhk": 2,
+      "title": "2BHK Nandanvan",
+      "location": {
+        "area": "Nandanvan",
+        "address": "Sector 7, Nandanvan Layout, Nagpur",
+        "lat": 21.112,
+        "lng": 79.102
+      },
+      "rent_price": 14500,
+      "is_for_sale": false,
+      "selling_price": null,
+      "commute_time_min": 20,
+      "transport_modes": [
+        "bike",
+        "car",
+        "bus"
+      ],
+      "amenities": {
+        "in_unit": [
+          "wifi",
+          "ac",
+          "geyser"
+        ],
+        "shared": [
+          "lift",
+          "parking",
+          "security",
+          "terrace"
+        ]
+      },
+      "nearby": [
+        {
+          "type": "hospital",
+          "name": "Nandanvan Maternity Home",
+          "lat": 21.113,
+          "lng": 79.103,
+          "distance_km": 0.2
+        },
+        {
+          "type": "school",
+          "name": "Nandanvan English School",
+          "lat": 21.111,
+          "lng": 79.101,
+          "distance_km": 0.3
+        },
+        {
+          "type": "supermarket",
+          "name": "Reliance Fresh Nandanvan",
+          "lat": 21.1122,
+          "lng": 79.1015,
+          "distance_km": 0.1
+        }
+      ],
+      "owner": {
+        "name": "Sunita Pawar",
+        "contact": "+91-9012345678",
+        "verified": true
+      },
+      "images": [
+        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&h=300&fit=crop"
+      ],
+      "rating": 4.1,
+      "available_from": "2025-08-10",
+      "gender_preference": "any",
+      "image_url": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&h=300&fit=crop"
+    },
+    {
+      "id": "P012",
+      "type": "PG",
+      "title": "Elite PG near Airport",
+      "location": {
+        "area": "Sonegaon",
+        "address": "Near Dr. Ambedkar Airport Gate, Sonegaon, Nagpur",
+        "lat": 21.0922,
+        "lng": 79.0472
+      },
+      "rent_price": 8000,
+      "is_for_sale": false,
+      "selling_price": null,
+      "rooms": null,
+      "gender_preference": "male",
+      "commute_time_min": 32,
+      "transport_modes": [
+        "bike",
+        "bus"
+      ],
+      "amenities": {
+        "in_unit": [
+          "wifi",
+          "ac",
+          "attached_bathroom"
+        ],
+        "shared": [
+          "parking",
+          "kitchen",
+          "laundry",
+          "cctv"
+        ]
+      },
+      "nearby": [
+        {
+          "type": "hospital",
+          "name": "Sonegaon Primary Health",
+          "lat": 21.093,
+          "lng": 79.048,
+          "distance_km": 0.2
+        },
+        {
+          "type": "airport",
+          "name": "Dr. Babasaheb Ambedkar Airport",
+          "lat": 21.0922,
+          "lng": 79.0473,
+          "distance_km": 0.05
+        },
+        {
+          "type": "bus_stop",
+          "name": "Sonegaon Bus Depot",
+          "lat": 21.0925,
+          "lng": 79.047,
+          "distance_km": 0.1
+        }
+      ],
+      "owner": {
+        "name": "Satish Nimkar",
+        "contact": "+91-9123456780",
+        "verified": true
+      },
+      "images": [
+        "https://images.unsplash.com/photo-1600566753376-12c8ab7c17a0?w=400&h=300&fit=crop"
+      ],
+      "rating": 3.7,
+      "available_from": "2025-07-01",
+      "image_url": "https://images.unsplash.com/photo-1600566753376-12c8ab7c17a0?w=400&h=300&fit=crop"
+    },
+    {
+      "id": "P013",
+      "type": "FLAT",
+      "bhk": 3,
+      "title": "3BHK Laxmi Nagar",
+      "location": {
+        "area": "Laxmi Nagar",
+        "address": "MLA Colony Adjacent, Laxmi Nagar, Nagpur",
+        "lat": 21.138,
+        "lng": 79.12
+      },
+      "rent_price": 25000,
+      "is_for_sale": true,
+      "selling_price": 7200000,
+      "commute_time_min": 18,
+      "transport_modes": [
+        "car",
+        "bike"
+      ],
+      "amenities": {
+        "in_unit": [
+          "wifi",
+          "ac",
+          "modular_kitchen",
+          "geyser",
+          "tv",
+          "washing_machine"
+        ],
+        "shared": [
+          "gym",
+          "pool",
+          "lift",
+          "parking",
+          "security",
+          "clubhouse",
+          "garden"
+        ]
+      },
+      "nearby": [
+        {
+          "type": "hospital",
+          "name": "Orange City Hospital",
+          "lat": 21.139,
+          "lng": 79.121,
+          "distance_km": 0.2
+        },
+        {
+          "type": "school",
+          "name": "Laxmi Nagar High School",
+          "lat": 21.137,
+          "lng": 79.119,
+          "distance_km": 0.3
+        },
+        {
+          "type": "mall",
+          "name": "Laxmi Nagar Square",
+          "lat": 21.1385,
+          "lng": 79.1205,
+          "distance_km": 0.1
+        }
+      ],
+      "owner": {
+        "name": "Amit Goenka",
+        "contact": "+91-9234567801",
+        "verified": true
+      },
+      "images": [
+        "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=400&h=300&fit=crop"
+      ],
+      "rating": 4.6,
+      "available_from": "2025-07-15",
+      "gender_preference": "any",
+      "image_url": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=400&h=300&fit=crop"
+    },
+    {
+      "id": "P014",
+      "type": "HOUSE",
+      "bhk": 2,
+      "title": "2BHK Row House, Wathoda",
+      "location": {
+        "area": "Wathoda",
+        "address": "Layout 3, Wathoda Road, Nagpur",
+        "lat": 21.08,
+        "lng": 79.11
+      },
+      "rent_price": 11000,
+      "is_for_sale": false,
+      "selling_price": null,
+      "commute_time_min": 38,
+      "transport_modes": [
+        "bike",
+        "car"
+      ],
+      "amenities": {
+        "in_unit": [
+          "garden",
+          "parking",
+          "solar_panel"
+        ],
+        "shared": []
+      },
+      "nearby": [
+        {
+          "type": "hospital",
+          "name": "Wathoda Primary Hospital",
+          "lat": 21.081,
+          "lng": 79.111,
+          "distance_km": 0.2
+        },
+        {
+          "type": "school",
+          "name": "Wathoda English School",
+          "lat": 21.079,
+          "lng": 79.109,
+          "distance_km": 0.3
+        }
+      ],
+      "owner": {
+        "name": "Geeta Thakur",
+        "contact": "+91-9345678012",
+        "verified": false
+      },
+      "images": [
+        "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=400&h=300&fit=crop"
+      ],
+      "rating": 3.4,
+      "available_from": "2025-10-01",
+      "gender_preference": "any",
+      "image_url": "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=400&h=300&fit=crop"
+    },
+    {
+      "id": "P015",
+      "type": "FLAT",
+      "bhk": 1,
+      "title": "1BHK Hanuman Nagar",
+      "location": {
+        "area": "Hanuman Nagar",
+        "address": "Near Ring Road, Hanuman Nagar, Nagpur",
+        "lat": 21.126,
+        "lng": 79.0885
+      },
+      "rent_price": 10500,
+      "is_for_sale": false,
+      "selling_price": null,
+      "commute_time_min": 16,
+      "transport_modes": [
+        "bike",
+        "bus"
+      ],
+      "amenities": {
+        "in_unit": [
+          "wifi",
+          "geyser",
+          "ac"
+        ],
+        "shared": [
+          "parking",
+          "security"
+        ]
+      },
+      "nearby": [
+        {
+          "type": "hospital",
+          "name": "Hanuman Nagar Clinic",
+          "lat": 21.127,
+          "lng": 79.0895,
+          "distance_km": 0.2
+        },
+        {
+          "type": "school",
+          "name": "Hanuman Nagar Vidyalaya",
+          "lat": 21.125,
+          "lng": 79.0875,
+          "distance_km": 0.3
+        },
+        {
+          "type": "metro_station",
+          "name": "Hanuman Nagar Metro",
+          "lat": 21.1262,
+          "lng": 79.0888,
+          "distance_km": 0.05
+        }
+      ],
+      "owner": {
+        "name": "Mohan Bhalerao",
+        "contact": "+91-9456780123",
+        "verified": true
+      },
+      "images": [
+        "https://images.unsplash.com/photo-1600573472550-8090b5e0745e?w=400&h=300&fit=crop"
+      ],
+      "rating": 4,
+      "available_from": "2025-08-01",
+      "gender_preference": "any",
+      "image_url": "https://images.unsplash.com/photo-1600573472550-8090b5e0745e?w=400&h=300&fit=crop"
+    },
+    {
+      "id": "P016",
+      "type": "PG",
+      "title": "Budget PG, Itwari",
+      "location": {
+        "area": "Itwari",
+        "address": "Near Itwari Railway Station, Nagpur",
+        "lat": 21.146,
+        "lng": 79.1
+      },
+      "rent_price": 4500,
+      "is_for_sale": false,
+      "selling_price": null,
+      "rooms": null,
+      "gender_preference": "male",
+      "commute_time_min": 14,
+      "transport_modes": [
+        "bus",
+        "train"
+      ],
+      "amenities": {
+        "in_unit": [
+          "fan",
+          "locker"
+        ],
+        "shared": [
+          "kitchen",
+          "bathroom",
+          "common_room"
+        ]
+      },
+      "nearby": [
+        {
+          "type": "railway_station",
+          "name": "Itwari Railway Station",
+          "lat": 21.1465,
+          "lng": 79.101,
+          "distance_km": 0.1
+        },
+        {
+          "type": "hospital",
+          "name": "Itwari Government Hospital",
+          "lat": 21.145,
+          "lng": 79.099,
+          "distance_km": 0.2
+        },
+        {
+          "type": "market",
+          "name": "Itwari Cloth Market",
+          "lat": 21.1458,
+          "lng": 79.1005,
+          "distance_km": 0.05
+        }
+      ],
+      "owner": {
+        "name": "Farhan Sheikh",
+        "contact": "+91-9567801234",
+        "verified": true
+      },
+      "images": [
+        "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=400&h=300&fit=crop"
+      ],
+      "rating": 3.2,
+      "available_from": "2025-07-01",
+      "image_url": "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=400&h=300&fit=crop"
+    }
+  ],
+  "transport_cost_config": {
+    "bike": {
+      "fuel_cost_per_km": 3.5,
+      "avg_speed_kmh": 35,
+      "description": "Petrol bike @ ~45 kmpl, ₹105/L"
+    },
+    "car": {
+      "fuel_cost_per_km": 7,
+      "avg_speed_kmh": 30,
+      "description": "Petrol car @ ~15 kmpl, ₹105/L"
+    },
+    "bus": {
+      "monthly_pass_cost": 800,
+      "avg_speed_kmh": 20,
+      "description": "MSRTC/city bus monthly pass"
+    }
+  },
+  "feasibility_score_weights": {
+    "commute_time": 0.35,
+    "transport_cost": 0.2,
+    "rent_to_salary_ratio": 0.25,
+    "amenity_score": 0.1,
+    "rating": 0.1
+  }
+}
