@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useState, useId, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Slot } from "@radix-ui/react-slot";
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "../../lib/firebase";
@@ -181,8 +182,64 @@ const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
 );
 PasswordInput.displayName = "PasswordInput";
 
+const roles = [
+  { value: 'customer', label: 'Customer', desc: 'Looking to travel' },
+  { value: 'dealer', label: 'Dealer', desc: 'Offering services' },
+];
+
+function RoleDropdown({ role, setRole }: { role: string; setRole: (v: string) => void }) {
+  const [open, setOpen] = useState(false);
+  const selected = roles.find(r => r.value === role) || roles[0];
+  return (
+    <div className="relative w-full">
+      <Label className="text-white mb-1.5 block">Sign in as</Label>
+      <button
+        type="button"
+        onClick={() => setOpen(o => !o)}
+        className="w-full flex items-center justify-between gap-3 px-4 py-2.5 rounded-lg border border-white/20 bg-white/10 backdrop-blur-md text-white text-sm hover:bg-white/15 hover:border-white/30 transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-white/30"
+      >
+        <span className="flex items-center gap-2">
+          <span className="font-medium">{selected.label}</span>
+          <span className="text-white/40 text-xs hidden sm:block">— {selected.desc}</span>
+        </span>
+        <svg
+          className={`w-4 h-4 text-white/50 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+          fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      {open && (
+        <div className="absolute top-full mt-2 left-0 right-0 z-50 rounded-xl border border-white/20 bg-black/70 backdrop-blur-xl shadow-2xl overflow-hidden">
+          {roles.map((r, i) => (
+            <button
+              key={r.value}
+              type="button"
+              onClick={() => { setRole(r.value); setOpen(false); }}
+              className={`w-full flex items-center gap-3 px-4 py-3 text-sm text-left transition-all duration-150 hover:bg-white/10 ${
+                role === r.value ? 'bg-white/10 text-white' : 'text-white/70'
+              } ${i !== 0 ? 'border-t border-white/10' : ''}`}
+            >
+              <span className="flex flex-col">
+                <span className="font-semibold text-white">{r.label}</span>
+                <span className="text-xs text-white/40">{r.desc}</span>
+              </span>
+              {role === r.value && (
+                <svg className="ml-auto w-4 h-4 text-white/70" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              )}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function SignInForm() {
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
   const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => { 
     event.preventDefault(); 
     setLoading(true);
@@ -191,10 +248,10 @@ function SignInForm() {
     const password = formData.get("password") as string;
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      alert("Successfully signed in!");
+      router.push("/dashboard");
     } catch (error: any) {
-      if (error.code === 'auth/invalid-credential') {
-        alert("Invalid email or password. If you don't have an account, click 'Sign up' below!");
+      if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+        alert("No account found with these credentials.\n\nIf you're new here → click 'Sign up' to create your account first!\nIf you already signed up → double-check your password.");
       } else {
         alert(error.message);
       }
@@ -219,6 +276,8 @@ function SignInForm() {
 
 function SignUpForm() {
   const [loading, setLoading] = useState(false);
+  const [role, setRole] = useState('customer');
+  const router = useRouter();
   const handleSignUp = async (event: React.FormEvent<HTMLFormElement>) => { 
     event.preventDefault(); 
     setLoading(true);
@@ -227,7 +286,7 @@ function SignUpForm() {
     const password = formData.get("password") as string;
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      alert("Successfully signed up!");
+      router.push("/dashboard");
     } catch (error: any) {
       if (error.code === 'auth/email-already-in-use') {
         alert("This email is already registered. Please sign in instead!");
@@ -247,6 +306,7 @@ function SignUpForm() {
         <p className="text-balance text-sm text-white/70">Enter your details below to sign up</p>
       </div>
       <div className="grid gap-4">
+        <RoleDropdown role={role} setRole={setRole} />
         <div className="grid gap-1"><Label htmlFor="name" className="text-white">Full Name</Label><Input id="name" name="name" type="text" placeholder="John Doe" required autoComplete="name" /></div>
         <div className="grid gap-2"><Label htmlFor="email" className="text-white">Email</Label><Input id="email" name="email" type="email" placeholder="enter your email" required autoComplete="email" /></div>
         <PasswordInput name="password" label="Password" required autoComplete="new-password" placeholder="Password" className="text-white" />
@@ -272,7 +332,7 @@ function AuthFormContainer({ isSignIn, onToggle }: { isSignIn: boolean; onToggle
       <Button variant="outline" type="button" onClick={async () => {
         try {
           await signInWithPopup(auth, googleProvider);
-          alert("Successfully signed in with Google!");
+          window.location.href = "/dashboard";
         } catch (error: any) {
           alert(error.message);
         }
