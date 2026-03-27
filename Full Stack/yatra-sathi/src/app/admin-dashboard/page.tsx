@@ -50,10 +50,10 @@ export default function AdminDashboardPage() {
       ]);
       const requests = await rRes.json();
       const pData = await pRes.json();
-      
+
       setPending(Array.isArray(requests) ? requests.filter((r: any) => r.status === 'pending') : []);
       setLiveProps(Array.isArray(pData.properties) ? pData.properties : []);
-    } catch (err) {}
+    } catch (err) { }
   };
 
   const handleApprove = async (req: any) => {
@@ -78,7 +78,7 @@ export default function AdminDashboardPage() {
       });
 
       await refreshData();
-    } catch (err) {}
+    } catch (err) { }
     setActionLoading(null);
   };
 
@@ -91,7 +91,7 @@ export default function AdminDashboardPage() {
         body: JSON.stringify({ reqId, status: 'denied' })
       });
       await refreshData();
-    } catch (err) {}
+    } catch (err) { }
     setActionLoading(null);
   };
 
@@ -105,7 +105,7 @@ export default function AdminDashboardPage() {
         body: JSON.stringify({ id })
       });
       await refreshData();
-    } catch (err) {}
+    } catch (err) { }
     setActionLoading(null);
   };
 

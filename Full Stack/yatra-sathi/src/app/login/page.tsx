@@ -131,7 +131,7 @@ function LoginInner() {
               <select value={role} onChange={(e) => setRole(e.target.value as Role)}>
                 <option value="user">Home Seeker</option>
                 <option value="owner">Property Owner</option>
-                <option value="admin">Admin</option>
+               
               </select>
             </label>
             <button className="login-submit" onClick={handleRegister} disabled={loading}>

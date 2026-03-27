@@ -148,7 +148,7 @@ export default function RecommendationPanel({
                   <button
                     type="button"
                     className="nav-btn nav-btn-map"
-                    onClick={() => onNavigate(prop)}
+                    onClick={(e) => { e.stopPropagation(); onNavigate(prop); }}
                   >
                     <Navigation2 size={12} /> Navigate
                   </button>
@@ -157,6 +157,7 @@ export default function RecommendationPanel({
                     target="_blank"
                     rel="noopener noreferrer"
                     className="nav-btn nav-btn-google"
+                    onClick={(e) => e.stopPropagation()}
                   >
                     <ExternalLink size={12} /> Google Maps
                   </a>

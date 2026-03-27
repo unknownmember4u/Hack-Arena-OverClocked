@@ -546,6 +546,183 @@ body {
   height: 100vh;
 }
 
+/* ================================================================
+   ROUTE INFO OVERLAY
+   ================================================================ */
+.route-info-overlay {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 50;
+  width: 280px;
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  animation: route-overlay-in 0.3s ease-out;
+}
+
+@keyframes route-overlay-in {
+  from {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.route-info-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  color: var(--text-muted);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.route-info-close:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--text);
+}
+
+.route-info-header {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.5rem;
+}
+
+.route-info-icon {
+  color: var(--primary);
+}
+
+.route-info-property {
+  font-size: 0.9375rem;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 0.625rem;
+  line-height: 1.2;
+}
+
+.route-info-endpoints {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin-bottom: 0.75rem;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.route-endpoint {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.route-endpoint svg {
+  color: var(--text-dim);
+  flex-shrink: 0;
+}
+
+.endpoint-label {
+  font-size: 0.5rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.endpoint-value {
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.route-endpoint-divider {
+  color: var(--text-dim);
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.route-info-stats {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.route-stat {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: rgba(59, 130, 246, 0.08);
+  border: 1px solid rgba(59, 130, 246, 0.15);
+  border-radius: 10px;
+  padding: 0.4rem 0.5rem;
+}
+
+.route-stat svg {
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.route-stat-val {
+  font-size: 0.8125rem;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.route-stat-lbl {
+  font-size: 0.5625rem;
+  color: var(--text-dim);
+}
+
+.route-info-dismiss {
+  width: 100%;
+  padding: 0.4rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 8px;
+  color: #f87171;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  transition: all 0.15s;
+}
+
+.route-info-dismiss:hover {
+  background: rgba(239, 68, 68, 0.18);
+  color: #fca5a5;
+}
+
 .map-area {
   position: relative;
   width: 100%;

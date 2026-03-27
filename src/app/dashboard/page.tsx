@@ -1,49 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { onAuthStateChanged, signOut, User } from "firebase/auth";
-import { auth } from "@/lib/firebase";
 import ScrollExpandMedia from "@/components/ui/scroll-expansion-hero";
 import Image from "next/image";
 
 export default function DashboardPage() {
-  const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [imgError, setImgError] = useState(false);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      // Bypassing mandatory login for now as requested
-      if (currentUser) {
-        setUser(currentUser);
-      }
-      setLoading(false);
-    });
-    return () => unsubscribe();
-  }, [router]);
-
-  const handleSignOut = async () => {
-    await signOut(auth);
-    router.replace("/");
-  };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
-        <div className="w-8 h-8 rounded-full border-2 border-white/20 border-t-white animate-spin" />
-      </div>
-    );
-  }
-
-  const avatarUrl = !imgError && user?.photoURL ? user.photoURL : null;
-  const initials = user?.displayName
-    ? user.displayName.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()
-    : user?.email?.[0]?.toUpperCase() ?? "U";
-
   return (
-    <div className="relative min-h-screen text-white bg-[#0a0a0f]">
+    <div className="relative min-h-screen text-white">
 
       {/* ── Glassmorphism Navbar ── */}
       <header
@@ -67,13 +29,6 @@ export default function DashboardPage() {
             priority
           />
         </div>
-
-        {/* Right: email + avatar + sign out */}
-        <div className="flex items-center gap-3">
-          <span className="text-sm text-white/50 hidden sm:block max-w-[180px] truncate">
-            {user?.email}
-          </span>
-        </div>
       </header>
 
       {/* Scroll Expansion Hero */}
@@ -88,22 +43,32 @@ export default function DashboardPage() {
       >
         <div className="max-w-4xl mx-auto text-white">
           <h2 className="text-3xl font-bold mb-6 text-white">Discover Your Next Journey</h2>
-          <p className="text-lg text-white/70 mb-8 leading-relaxed">
+          <p className="text-lg text-white/70 mb-6 leading-relaxed">
             YatraSathi is your intelligent travel companion. Plan, explore, and experience
             unforgettable destinations across India — all in one place.
           </p>
 
-          <button
-            onClick={() => window.location.href = "http://localhost:3000"}
-            className="px-8 py-3 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-[0_0_20px_rgba(124,58,237,0.3)] hover:shadow-[0_0_30px_rgba(124,58,237,0.5)]"
-            style={{
-              background: "linear-gradient(135deg, #7c3aed, #2563eb)",
-              border: "1px solid rgba(255,255,255,0.1)",
-            }}
-          >
-            Get Started
-          </button>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-10">
+            {[
+              { label: "Trips Planned", value: "—", icon: "🗺️" },
+              { label: "Places Saved", value: "—", icon: "📍" },
+              { label: "Memories Made", value: "—", icon: "📸" },
+            ].map((card) => (
+              <div
+                key={card.label}
+                className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-6 flex flex-col gap-2 hover:border-white/20 hover:bg-white/10 transition-all duration-200"
+              >
+                <span className="text-2xl">{card.icon}</span>
+                <span className="text-3xl font-bold text-white/40">{card.value}</span>
+                <span className="text-sm text-white/50">{card.label}</span>
+              </div>
+            ))}
+          </div>
 
+          <div className="mt-12 inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/10 bg-white/5 text-sm text-white/40">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+            More features coming soon — stay tuned!
+          </div>
         </div>
       </ScrollExpandMedia>
     </div>

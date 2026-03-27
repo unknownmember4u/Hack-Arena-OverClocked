@@ -79,7 +79,7 @@ export default function OwnerDashboardPage() {
         // Only show requests for this owner
         setRequests(data.filter((r: any) => r.ownerId === firebaseUser?.uid));
       }
-    } catch (err) {}
+    } catch (err) { }
   }, [firebaseUser]);
 
   useEffect(() => {
@@ -194,14 +194,14 @@ export default function OwnerDashboardPage() {
       setInUnit([]); setShared([]);
       setLat(null); setLng(null); setPropertyImage(null); setImagePreview(null);
       if (markerRef.current) { markerRef.current.remove(); markerRef.current = null; }
-      
+
       // Refresh
       fetchRequests();
     } catch (err: unknown) {
       setSubmitMsg('❌ Error: ' + (err as Error).message);
     }
     setSubmitting(false);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [title, type, bhk, rentPrice, address, area, gender, inUnit, shared, lat, lng, propertyImage, firebaseUser, profile, fetchRequests]);
 
   if (loading) return <div className="dash-loading"><Loader2 size={28} className="spin" /> Loading…</div>;

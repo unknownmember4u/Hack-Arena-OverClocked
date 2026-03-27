@@ -16,6 +16,7 @@ import UserProfileForm from '@/components/UserProfileForm';
 import MapView, { type MapViewHandle } from '@/components/MapView';
 import RecommendationPanel from '@/components/RecommendationPanel';
 import PropertyDetailModal from '@/components/PropertyDetailModal';
+import RouteInfoOverlay, { type RouteInfo } from '@/components/RouteInfoOverlay';
 import { useAuth } from '@/lib/authContext';
 import type { UserProfile } from '@/types/user';
 import type { Property, PropertyData, PropertyFilters } from '@/types/property';
@@ -45,6 +46,7 @@ export default function Home() {
   const [filteredProperties, setFilteredProperties] = useState<Property[]>([]);
   const [scores, setScores] = useState<Map<string, number>>(new Map());
   const [detailProperty, setDetailProperty] = useState<Property | null>(null);
+  const [routeInfo, setRouteInfo] = useState<RouteInfo | null>(null);
   const mapInstanceRef = useRef<mapboxgl.Map | null>(null);
   const mapViewRef = useRef<MapViewHandle | null>(null);
 
@@ -111,51 +113,100 @@ export default function Home() {
     mapInstanceRef.current = map;
   }, []);
 
+  /** Map transport preference to Mapbox Directions profile */
+  const getMapboxProfile = (mode: string): string => {
+    switch (mode) {
+      case 'bike': return 'cycling';
+      case 'car': return 'driving';
+      case 'bus': return 'driving';
+      default: return 'driving';
+    }
+  };
+
+  /** Clear the route line from the map and dismiss the overlay */
+  const clearRoute = useCallback(() => {
+    const map = mapInstanceRef.current;
+    if (map) {
+      if (map.getLayer('route')) map.removeLayer('route');
+      if (map.getLayer('route-glow')) map.removeLayer('route-glow');
+      if (map.getSource('route')) map.removeSource('route');
+    }
+    setRouteInfo(null);
+  }, []);
+
   const handleNavigate = useCallback(
     async (property: Property) => {
       const map = mapInstanceRef.current;
       if (!map || !userProfile) return;
 
       const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+      const profile = getMapboxProfile(userProfile.preferredTransport);
       const from = `${userProfile.currentLocation.lng},${userProfile.currentLocation.lat}`;
       const to = `${property.location.lng},${property.location.lat}`;
 
       try {
         const res = await fetch(
-          `https://api.mapbox.com/directions/v5/mapbox/driving/${from};${to}?geometries=geojson&access_token=${token}`
+          `https://api.mapbox.com/directions/v5/mapbox/${profile}/${from};${to}?geometries=geojson&access_token=${token}`
         );
         const data = await res.json();
-        const route = data.routes?.[0]?.geometry;
+        const routeData = data.routes?.[0];
+        const route = routeData?.geometry;
         if (!route) return;
 
-        if (map.getSource('route')) {
-          (map.getSource('route') as mapboxgl.GeoJSONSource).setData({
-            type: 'Feature',
-            properties: {},
-            geometry: route,
-          });
-        } else {
-          map.addSource('route', {
-            type: 'geojson',
-            data: { type: 'Feature', properties: {}, geometry: route },
-          });
-          map.addLayer({
-            id: 'route',
-            type: 'line',
-            source: 'route',
-            layout: { 'line-join': 'round', 'line-cap': 'round' },
-            paint: {
-              'line-color': '#3b82f6',
-              'line-width': 5,
-              'line-opacity': 0.8,
-            },
-          });
-        }
+        // Extract distance (metres → km) and duration (seconds → minutes)
+        const distanceKm = (routeData.distance ?? 0) / 1000;
+        const durationMin = (routeData.duration ?? 0) / 60;
+
+        // Remove old layers/source first
+        if (map.getLayer('route')) map.removeLayer('route');
+        if (map.getLayer('route-glow')) map.removeLayer('route-glow');
+        if (map.getSource('route')) map.removeSource('route');
+
+        map.addSource('route', {
+          type: 'geojson',
+          data: { type: 'Feature', properties: {}, geometry: route },
+        });
+
+        // Glow layer (wider, semi-transparent)
+        map.addLayer({
+          id: 'route-glow',
+          type: 'line',
+          source: 'route',
+          layout: { 'line-join': 'round', 'line-cap': 'round' },
+          paint: {
+            'line-color': '#3b82f6',
+            'line-width': 12,
+            'line-opacity': 0.25,
+          },
+        });
+
+        // Main route line
+        map.addLayer({
+          id: 'route',
+          type: 'line',
+          source: 'route',
+          layout: { 'line-join': 'round', 'line-cap': 'round' },
+          paint: {
+            'line-color': '#3b82f6',
+            'line-width': 5,
+            'line-opacity': 0.9,
+          },
+        });
 
         const coords = route.coordinates as [number, number][];
         const bounds = new mapboxgl.LngLatBounds();
         coords.forEach((c) => bounds.extend(c));
         map.fitBounds(bounds, { padding: 80 });
+
+        // Set route info for the overlay
+        setRouteInfo({
+          propertyName: property.title,
+          distanceKm,
+          durationMin,
+          transportMode: userProfile.preferredTransport,
+          fromLabel: userProfile.currentLocation.label,
+          toArea: property.location.area,
+        });
       } catch (err) {
         console.error('Route error:', err);
       }
@@ -277,6 +328,11 @@ export default function Home() {
           onResultsComputed={handleResultsComputed}
           onMapReady={handleMapReady}
         />
+
+        {/* Route info overlay */}
+        {routeInfo && (
+          <RouteInfoOverlay info={routeInfo} onClose={clearRoute} />
+        )}
       </main>
 
       {/* Property Detail Modal */}
