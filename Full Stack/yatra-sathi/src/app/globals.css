@@ -742,9 +742,27 @@ body {
   margin-top: -1px;
 }
 
-/* Old 3D pin styles (kept for any legacy refs) */
-.property-pin-3d { display: none; }
-.pin-shadow, .pin-stem, .pin-avatar, .pin-price { display: none; }
+/* Price overlay inside the circular pin — highlighted */
+.pin-price-overlay {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #0f172a;
+  font-size: 0.5625rem;
+  font-weight: 900;
+  padding: 2px 7px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(255,255,255,0.4);
+  pointer-events: none;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+
+/* Old strip/tip — hidden */
+.pin-card-strip, .pin-card-tip { display: none; }
 
 /* ================================================================
    USER LOCATION MARKER
@@ -804,60 +822,218 @@ body {
 /* ================================================================
    POPUP
    ================================================================ */
+/* ================================================================
+   POPUP CONTENT REVAMP
+   ================================================================ */
 .popup-content {
   font-family: var(--font-sans, system-ui, sans-serif);
   font-size: 0.75rem;
   line-height: 1.4;
+  overflow: hidden;
+}
+
+/* Image with badge overlay */
+.popup-img-wrap {
+  position: relative;
+  height: 130px;
+  margin: -10px -10px 0;
+  border-radius: var(--radius) var(--radius) 0 0;
+  overflow: hidden;
 }
 .popup-img {
   width: 100%;
-  height: 120px;
+  height: 100%;
   object-fit: cover;
-  border-radius: 6px;
-  margin-bottom: 0.375rem;
+  display: block;
+}
+.popup-img-placeholder {
+  width: 100%;
+  height: 100%;
+  background: var(--bg-elevated);
+}
+.popup-img-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(15,23,42,0.85);
+  color: var(--text);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 999px;
+  border: 1px solid var(--border-light);
+  backdrop-filter: blur(4px);
+}
+
+/* Body */
+.popup-body {
+  padding: 8px 2px 2px;
 }
 .popup-title {
   font-size: 0.9375rem;
-  font-weight: 700;
-  margin: 0 0 0.125rem;
+  font-weight: 800;
+  margin: 0 0 2px;
+  color: var(--text);
+  line-height: 1.2;
 }
-.popup-type { color: #64748b; font-size: 0.6875rem; margin: 0; }
-.popup-rent, .popup-commute, .popup-rating { margin: 0.1rem 0; }
-.popup-meta {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.25rem;
-}
-.popup-badge {
-  padding: 0.1rem 0.4rem;
-  background: rgba(59,130,246,0.15);
-  border: 1px solid rgba(59,130,246,0.3);
-  border-radius: 999px;
-  color: var(--primary);
+.popup-addr {
   font-size: 0.5625rem;
-  font-weight: 600;
-  text-transform: capitalize;
+  color: var(--text-dim);
+  margin: 0 0 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-.popup-rating {
+
+/* Price row */
+.popup-price-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.popup-price {
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: var(--accent);
+}
+.popup-price-sub {
+  font-size: 0.5625rem;
+  font-weight: 400;
+  color: var(--text-dim);
+  margin-left: 1px;
+}
+.popup-star-badge {
   font-size: 0.6875rem;
   font-weight: 700;
   color: var(--accent);
+  background: rgba(245,158,11,0.12);
+  padding: 2px 7px;
+  border-radius: 999px;
+  border: 1px solid rgba(245,158,11,0.3);
 }
 
+/* Rent highlight strip */
+.popup-rent-highlight {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, rgba(245,158,11,0.18) 0%, rgba(217,119,6,0.1) 100%);
+  border: 1px solid rgba(245,158,11,0.35);
+  border-radius: 8px;
+  padding: 7px 10px;
+  margin: 6px 0 0;
+}
+.popup-rent-label {
+  font-size: 0.5625rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.popup-rent-amount {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #f59e0b;
+  letter-spacing: -0.03em;
+}
+.popup-rent-mo {
+  font-size: 0.5625rem;
+  font-weight: 400;
+  color: var(--text-dim);
+  margin-left: 2px;
+}
+
+/* Details grid */
+.popup-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 8px 0;
+  border-radius: 999px;
+}
+.popup-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px 8px;
+}
+.popup-detail-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.popup-detail-label {
+  font-size: 0.45rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.popup-detail-value {
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: var(--text);
+  text-transform: capitalize;
+}
+
+/* Info chips */
+.popup-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.popup-chip {
+  font-size: 0.5625rem;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: capitalize;
+}
+.popup-chip-gender {
+  background: rgba(59,130,246,0.12);
+  border-color: rgba(59,130,246,0.3);
+  color: var(--primary);
+}
+
+/* Mapbox popup shell */
 .mapboxgl-popup-content {
   background: var(--bg-surface) !important;
   color: var(--text) !important;
   border-radius: var(--radius) !important;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5) !important;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6) !important;
   padding: 10px !important;
+  overflow: hidden;
 }
 .mapboxgl-popup-tip {
   border-top-color: var(--bg-surface) !important;
 }
+
+/* Close button — high contrast circle */
 .mapboxgl-popup-close-button {
-  color: var(--text-muted) !important;
-  font-size: 1.125rem !important;
+  position: absolute !important;
+  top: 6px !important;
+  right: 6px !important;
+  z-index: 10 !important;
+  width: 22px !important;
+  height: 22px !important;
+  border-radius: 50% !important;
+  background: rgba(15,23,42,0.8) !important;
+  border: 1.5px solid rgba(255,255,255,0.25) !important;
+  color: #fff !important;
+  font-size: 14px !important;
+  line-height: 22px !important;
+  text-align: center !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: background 0.15s !important;
+  padding: 0 !important;
+}
+.mapboxgl-popup-close-button:hover {
+  background: rgba(239,68,68,0.85) !important;
 }
 
 /* ================================================================

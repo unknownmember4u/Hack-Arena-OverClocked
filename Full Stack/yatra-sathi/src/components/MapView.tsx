@@ -100,33 +100,46 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(function MapView(
     return container;
   };
 
-  /** Build popup HTML using string concatenation (avoids JSON template-literal issues) */
+  /** Build popup HTML using string concatenation */
   const buildPopupHtml = (prop: Property): string => {
     const imgPart = prop.image_url
       ? '<img src="' + prop.image_url + '" class="popup-img" alt="' + prop.title + '" loading="lazy" />'
       : '<div class="popup-img-placeholder"></div>';
 
-    const typeLabel = prop.type + (prop.bhk ? ' ' + prop.bhk + 'BHK' : '');
     const rentFormatted = '\u20b9' + prop.rent_price.toLocaleString('en-IN');
-    const nearbyCount = prop.nearby.length + ' nearby';
-    const availPart = prop.available_from
-      ? '<span class="popup-chip">From ' + prop.available_from + '</span>'
-      : '';
+    const bhkText   = prop.bhk ? prop.bhk + ' BHK' : '-';
+    const typeText  = prop.type || '-';
+    const areaText  = prop.location.area || '';
+    const availText = prop.available_from ? prop.available_from : 'Immediately';
+    const nearbyCount = prop.nearby.length + ' amenities';
+
+    const detailRow = (label: string, value: string) =>
+      '<div class="popup-detail-row"><span class="popup-detail-label">' + label + '</span><span class="popup-detail-value">' + value + '</span></div>';
 
     return (
       '<div class="popup-content">'
-      + '<div class="popup-img-wrap">' + imgPart + '<span class="popup-img-badge">' + typeLabel + '</span></div>'
+      // Image
+      + '<div class="popup-img-wrap">' + imgPart + '</div>'
+      // Rent highlight strip
+      + '<div class="popup-rent-highlight">'
+      + '<span class="popup-rent-label">Monthly Rent</span>'
+      + '<span class="popup-rent-amount">' + rentFormatted + '<span class="popup-rent-mo">/mo</span></span>'
+      + '</div>'
+      // Body
       + '<div class="popup-body">'
       + '<h3 class="popup-title">' + prop.title + '</h3>'
       + '<p class="popup-addr">' + prop.location.address + '</p>'
-      + '<div class="popup-price-row">'
-      + '<span class="popup-price">' + rentFormatted + '<span class="popup-price-sub">/mo</span></span>'
-      + '<span class="popup-star-badge">&#9733; ' + prop.rating + '</span>'
+      + '<div class="popup-divider"></div>'
+      + '<div class="popup-details-grid">'
+      + detailRow('Type', typeText)
+      + detailRow('Size', bhkText)
+      + detailRow('Area', areaText)
+      + detailRow('Available', availText)
+      + detailRow('Rating', prop.rating + ' / 5')
+      + detailRow('Nearby', nearbyCount)
       + '</div>'
-      + '<div class="popup-chips">'
+      + '<div class="popup-chips" style="margin-top:6px">'
       + '<span class="popup-chip popup-chip-gender">' + prop.gender_preference + '</span>'
-      + '<span class="popup-chip">' + nearbyCount + '</span>'
-      + availPart
       + '</div>'
       + '</div>'
       + '</div>'
