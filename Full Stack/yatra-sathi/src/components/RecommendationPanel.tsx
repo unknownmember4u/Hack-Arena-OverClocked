@@ -18,6 +18,7 @@ interface RecommendationPanelProps {
   userProfile: UserProfile;
   scores: Map<string, number>;
   onNavigate: (property: Property) => void;
+  onCardClick?: (property: Property) => void;
 }
 
 export default function RecommendationPanel({
@@ -25,6 +26,7 @@ export default function RecommendationPanel({
   userProfile,
   scores,
   onNavigate,
+  onCardClick,
 }: RecommendationPanelProps) {
   const sorted = [...filteredProperties].sort((a, b) => {
     return (scores.get(b.id) ?? 0) - (scores.get(a.id) ?? 0);
@@ -77,7 +79,7 @@ export default function RecommendationPanel({
           const topAmenities = prop.nearby.slice(0, 2);
 
           return (
-            <div key={prop.id} className="rec-card">
+            <div key={prop.id} className="rec-card" onClick={() => onCardClick?.(prop)} style={{ cursor: onCardClick ? 'pointer' : undefined }}>
               {/* Image header */}
               {prop.image_url && (
                 <div className="rec-img-wrap">

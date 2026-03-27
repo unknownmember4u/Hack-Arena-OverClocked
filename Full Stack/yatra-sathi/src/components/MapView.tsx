@@ -94,7 +94,7 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(function MapView(
     // Price overlay bottom-centre of circle
     const priceEl = document.createElement('div');
     priceEl.className = 'pin-price-overlay';
-    priceEl.textContent = '\u20b9' + (prop.rent_price / 1000).toFixed(0) + 'k';
+    priceEl.textContent = '\u20b9' + ((prop.rent_price || 0) / 1000).toFixed(0) + 'k';
     container.appendChild(priceEl);
 
     return container;
@@ -106,12 +106,12 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(function MapView(
       ? '<img src="' + prop.image_url + '" class="popup-img" alt="' + prop.title + '" loading="lazy" />'
       : '<div class="popup-img-placeholder"></div>';
 
-    const rentFormatted = '\u20b9' + prop.rent_price.toLocaleString('en-IN');
+    const rentFormatted = '\u20b9' + (prop.rent_price || 0).toLocaleString('en-IN');
     const bhkText   = prop.bhk ? prop.bhk + ' BHK' : '-';
     const typeText  = prop.type || '-';
-    const areaText  = prop.location.area || '';
+    const areaText  = prop.location?.area || '';
     const availText = prop.available_from ? prop.available_from : 'Immediately';
-    const nearbyCount = prop.nearby.length + ' amenities';
+    const nearbyCount = (prop.nearby?.length || 0) + ' amenities';
 
     const detailRow = (label: string, value: string) =>
       '<div class="popup-detail-row"><span class="popup-detail-label">' + label + '</span><span class="popup-detail-value">' + value + '</span></div>';
@@ -128,7 +128,7 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(function MapView(
       // Body
       + '<div class="popup-body">'
       + '<h3 class="popup-title">' + prop.title + '</h3>'
-      + '<p class="popup-addr">' + prop.location.address + '</p>'
+      + '<p class="popup-addr">' + (prop.location?.address || '') + '</p>'
       + '<div class="popup-divider"></div>'
       + '<div class="popup-details-grid">'
       + detailRow('Type', typeText)
@@ -151,6 +151,7 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(function MapView(
     customMarkersRef.current = [];
 
     properties.forEach((prop) => {
+      if (!prop.location?.lat || !prop.location?.lng) return;
       const el = buildPropertyPin(prop);
 
       const popup = new mapboxgl.Popup({
@@ -280,7 +281,8 @@ const MapView = forwardRef<MapViewHandle, MapViewProps>(function MapView(
     bounds.extend([userProfile.currentLocation.lng, userProfile.currentLocation.lat]);
     filtered.forEach((p) => bounds.extend([p.location.lng, p.location.lat]));
     map.fitBounds(bounds, { padding: 60, maxZoom: 14 });
-  }, [userProfile, isFormSubmitted, propertyData, placeUserMarker, addEnhancedPropertyMarkers, filters, onResultsComputed]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userProfile, isFormSubmitted, propertyData, placeUserMarker, addEnhancedPropertyMarkers, filters]);
 
   return (
     <div className="map-area">

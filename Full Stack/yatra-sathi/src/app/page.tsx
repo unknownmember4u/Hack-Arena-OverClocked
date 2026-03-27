@@ -1,12 +1,12 @@
 'use client';
 
 /**
- * Main page — map-first layout.
+ * Main page — map-first layout with static JSON properties.
  * Sidebar: form → results. Map fills the rest.
- * Recommendations render in the sidebar after submit.
  */
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import mapboxgl from 'mapbox-gl';
 import {
   Home as HomeIcon, MapPin, Bike, Car, Bus, X, DollarSign, RotateCcw,
@@ -15,11 +15,12 @@ import {
 import UserProfileForm from '@/components/UserProfileForm';
 import MapView, { type MapViewHandle } from '@/components/MapView';
 import RecommendationPanel from '@/components/RecommendationPanel';
+import PropertyDetailModal from '@/components/PropertyDetailModal';
+import { useAuth } from '@/lib/authContext';
 import type { UserProfile } from '@/types/user';
 import type { Property, PropertyData, PropertyFilters } from '@/types/property';
 
 import propertyDataJson from '../../Data/property.json';
-
 const propertyData = propertyDataJson as unknown as PropertyData;
 
 const DEFAULT_FILTERS: PropertyFilters = {
@@ -29,6 +30,9 @@ const DEFAULT_FILTERS: PropertyFilters = {
 };
 
 export default function Home() {
+  const { firebaseUser, loading } = useAuth();
+  const router = useRouter();
+
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState<{
@@ -40,8 +44,16 @@ export default function Home() {
   const [isLocating, setIsLocating] = useState(false);
   const [filteredProperties, setFilteredProperties] = useState<Property[]>([]);
   const [scores, setScores] = useState<Map<string, number>>(new Map());
+  const [detailProperty, setDetailProperty] = useState<Property | null>(null);
   const mapInstanceRef = useRef<mapboxgl.Map | null>(null);
   const mapViewRef = useRef<MapViewHandle | null>(null);
+
+  /* Auth guard — redirect unauthenticated users */
+  useEffect(() => {
+    if (!loading && !firebaseUser) {
+      router.push('/login');
+    }
+  }, [loading, firebaseUser, router]);
 
   const handleLocationSelect = useCallback(
     (lat: number, lng: number, label: string) => {
@@ -51,15 +63,10 @@ export default function Home() {
           prev ? { ...prev, currentLocation: { lat, lng, label } } : null
         );
       }
-      // Place marker on map if available
-      if (mapInstanceRef.current) {
-        // The MapView component handles this internally
-      }
     },
     [userProfile]
   );
 
-  /** Hardcoded live location — Tulsiram Gaikwad Patil College */
   const LIVE_LOCATION = {
     lat: 20.9603,
     lng: 79.0149,
@@ -69,12 +76,11 @@ export default function Home() {
   const handleUseLiveLocation = useCallback(() => {
     const { lat, lng, label } = LIVE_LOCATION;
     setIsLocating(true);
-    // Place marker directly, no API needed
     setTimeout(() => {
       handleLocationSelect(lat, lng, label);
       mapViewRef.current?.placeUserMarker(lat, lng);
       setIsLocating(false);
-    }, 300); // small delay for UX feedback
+    }, 300);
   }, [handleLocationSelect]);
 
   const handleFormSubmit = (partial: Omit<UserProfile, 'currentLocation'>) => {
@@ -105,7 +111,6 @@ export default function Home() {
     mapInstanceRef.current = map;
   }, []);
 
-  /** Draw route on map from user to property */
   const handleNavigate = useCallback(
     async (property: Property) => {
       const map = mapInstanceRef.current;
@@ -167,9 +172,14 @@ export default function Home() {
     }
   };
 
+  if (loading) return <div className="dash-loading">Loading…</div>;
+  if (!firebaseUser) return null;
+
   return (
     <div className="app-layout">
       <aside className="sidebar">
+
+
         {!isFormSubmitted ? (
           <UserProfileForm
             onSubmit={handleFormSubmit}
@@ -214,7 +224,6 @@ export default function Home() {
                 )}
               </div>
 
-              {/* Active filters */}
               <div className="active-filters">
                 {filters.gender !== 'all' && (
                   <span className="active-filter-tag">
@@ -242,6 +251,7 @@ export default function Home() {
                   userProfile={userProfile!}
                   scores={scores}
                   onNavigate={handleNavigate}
+                  onCardClick={(prop) => setDetailProperty(prop)}
                 />
                 <p className="results-count">
                   Showing {filteredProperties.length} of {propertyData.properties.length} properties
@@ -268,6 +278,14 @@ export default function Home() {
           onMapReady={handleMapReady}
         />
       </main>
+
+      {/* Property Detail Modal */}
+      {detailProperty && (
+        <PropertyDetailModal
+          property={detailProperty}
+          onClose={() => setDetailProperty(null)}
+        />
+      )}
     </div>
   );
 }

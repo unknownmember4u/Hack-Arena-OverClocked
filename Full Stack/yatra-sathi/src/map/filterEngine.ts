@@ -18,7 +18,7 @@ export function filterProperties(
     // Transport mode — skip if "none" (Not Specified)
     if (
       userProfile.preferredTransport !== 'none' &&
-      !prop.transport_modes.includes(userProfile.preferredTransport)
+      !(prop.transport_modes ?? []).includes(userProfile.preferredTransport)
     ) {
       return false;
     }
@@ -26,7 +26,7 @@ export function filterProperties(
     // Rent budget
     if (
       userProfile.maxRentBudget !== undefined &&
-      prop.rent_price > userProfile.maxRentBudget
+      (prop.rent_price || 0) > userProfile.maxRentBudget
     ) {
       return false;
     }

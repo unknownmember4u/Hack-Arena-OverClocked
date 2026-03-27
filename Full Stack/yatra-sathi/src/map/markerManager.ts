@@ -139,6 +139,7 @@ export class MarkerManager {
     this.clearAmenityMarkers();
 
     amenities.forEach((a) => {
+      if (!a || !a.type || !a.lat || !a.lng) return;
       const el = document.createElement('div');
       el.className = 'amenity-marker';
       el.textContent = AMENITY_ICONS[a.type] ?? '📌';
