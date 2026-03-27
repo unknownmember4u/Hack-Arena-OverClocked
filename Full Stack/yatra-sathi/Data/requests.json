@@ -25,7 +25,8 @@
     "ownerId": "O5fKfW7IkLh8j7a5bBfw35jdMEC3",
     "ownerName": "own",
     "reqId": "REQ_1774608473666",
-    "status": "pending",
-    "submittedAt": "2026-03-27T10:47:53.666Z"
+    "status": "approved",
+    "submittedAt": "2026-03-27T10:47:53.666Z",
+    "reviewedAt": "2026-03-27T10:50:42.356Z"
   }
 ]
